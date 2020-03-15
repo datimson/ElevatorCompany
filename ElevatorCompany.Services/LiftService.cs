@@ -1,12 +1,37 @@
 ﻿using ElevatorCompany.Models;
 using ElevatorCompany.Models.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ElevatorCompany.Services
 {
     public class LiftService
     {
-        public static Instruction CalculateNextInstruction(Lift lift)
+        public static List<Instruction> CalculateOptimalInstructions(Lift lift, List<Summon> summons)
+        {
+            var instructions = new List<Instruction>();
+
+            int maxIterations = 1000; // just in case
+            int counter = 0;
+            while (summons.Any() || lift.Passengers.Any())
+            {
+                var nextInstruction = CalculateNextInstruction(lift, summons);
+                instructions.Add(nextInstruction);
+
+                ExecuteInstruction(nextInstruction, lift, summons);
+
+                counter++;
+                if (counter > maxIterations)
+                {
+                    throw new Exception("Exceeded max iterations");
+                }
+            }
+
+            return instructions;
+        }
+
+        public static Instruction CalculateNextInstruction(Lift lift, List<Summon> summons)
         {
             Instruction instruction = Instruction.Stop;
 
@@ -26,7 +51,7 @@ namespace ElevatorCompany.Services
             return instruction;
         }
 
-        public static void ExecuteInstruction(Instruction instruction, Lift lift)
+        public static void ExecuteInstruction(Instruction instruction, Lift lift, List<Summon> summons)
         {
             switch (instruction)
             {
