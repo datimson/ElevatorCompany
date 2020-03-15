@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorCompany.Services", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorCompany.Tests", "ElevatorCompany.Tests\ElevatorCompany.Tests.csproj", "{566EAA73-92C6-4922-9D66-A045A72FC197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorCompany.LiftConsole", "ElevatorCompany.Console\ElevatorCompany.LiftConsole.csproj", "{D7D06618-DF8F-4843-AED6-36D634DD7AB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElevatorCompany.LiftConsole", "ElevatorCompany.LiftConsole\ElevatorCompany.LiftConsole.csproj", "{D7D06618-DF8F-4843-AED6-36D634DD7AB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
