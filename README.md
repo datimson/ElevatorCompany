@@ -12,7 +12,7 @@ Your program needs to plan the optimal set of instructions for the lift to trave
 - <strong>D)</strong> Passenger 1 summons lift to go up from Ground. They choose L5. Passenger 2 summons lift to go down from L4. Passenger 3 summons lift to go down from L10. Passengers 2 and 3 choose to travel to Ground.
 
 ### How to run this
-This repository contains a Visual Studio solution. There is a Console project named ElevatorCompany.LiftConsole and when run this will print the lift instructions for each of the above test cases. There is also an xUnit project with a bunch of Unit Tests named ElevatorCompany.Tests. 
+This repository contains a Visual Studio solution. There is a Console project named ElevatorCompany.LiftConsole and when run this will print the lift instructions for each of the above test cases. There is also an xUnit project with a bunch of Unit Tests named ElevatorCompany.Tests. .Net Core 3.1 is required.
 
 ### Implementation Decisions
 
