@@ -35,6 +35,8 @@ namespace ElevatorCompany.Services
                     break;
                 case Instruction.OpenDoors:
                     lift.State = LiftState.DoorsOpen;
+                    // passengers get off
+                    lift.Passengers.RemoveAll(x => x.DesiredLevel == lift.Level);
                     break;
                 case Instruction.TravelUp:
                     lift.State = LiftState.Moving;
