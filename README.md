@@ -10,3 +10,12 @@ Your program needs to plan the optimal set of instructions for the lift to trave
 2. Passenger summons lift on level 6 to go down. A passenger on level 4 summons the lift to go down. They both choose L1.
 3. Passenger 1 summons lift to go up from L2. Passenger 2 summons lift to go down from L4. Passenger 1 chooses to go to L6. Passenger 2 chooses to go to Ground Floor
 4. Passenger 1 summons lift to go up from Ground. They choose L5. Passenger 2 summons lift to go down from L4. Passenger 3 summons lift to go down from L10. Passengers 2 and 3 choose to travel to Ground.
+
+### Implementation Decisions
+
+#### Definition of Optimal
+The lift should travel in the same direction to the highest or lowest floor for any summons or
+passenger before changing direction, and collect any passengers along the way who also want to travel in the same direction.
+
+#### 0 is considered Bottom/Ground Floor
+
