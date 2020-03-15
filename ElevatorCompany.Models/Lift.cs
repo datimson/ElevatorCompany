@@ -7,5 +7,6 @@ namespace ElevatorCompany.Models
     {
         public int Level { get; set; } = 0;
         public LiftState State { get; set; } = LiftState.Stopped;
+        public Direction? Direction { get; set; }
     }
 }

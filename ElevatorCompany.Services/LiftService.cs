@@ -1,4 +1,5 @@
 ﻿using ElevatorCompany.Models;
+using ElevatorCompany.Models.Enums;
 using System;
 
 namespace ElevatorCompany.Services
@@ -11,18 +12,41 @@ namespace ElevatorCompany.Services
 
             switch (lift.State)
             {
-                case Models.Enums.LiftState.Stopped:
-                    instruction = Instruction.Travel;
+                case LiftState.Stopped:
+                    instruction = Instruction.TravelUp;
                     break;
-                case Models.Enums.LiftState.DoorsOpen:
+                case LiftState.DoorsOpen:
                     instruction = Instruction.Stop; // close doors
                     break;
-                case Models.Enums.LiftState.Moving:
+                case LiftState.Moving:
                     instruction = Instruction.Stop;
                     break;
             }
 
             return instruction;
+        }
+
+        public static void ExecuteInstruction(Instruction instruction, Lift lift)
+        {
+            switch (instruction)
+            {
+                case Instruction.Stop:
+                    lift.State = LiftState.Stopped;
+                    break;
+                case Instruction.OpenDoors:
+                    lift.State = LiftState.DoorsOpen;
+                    break;
+                case Instruction.TravelUp:
+                    lift.State = LiftState.Moving;
+                    lift.Direction = Direction.Up;
+                    lift.Level++;
+                    break;
+                case Instruction.TravelDown:
+                    lift.State = LiftState.Moving;
+                    lift.Direction = Direction.Down;
+                    lift.Level--;
+                    break;
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace ElevatorCompany.Models
     {
         Stop,
         OpenDoors,
-        Travel
+        TravelUp,
+        TravelDown
     }
 }
