@@ -13,4 +13,9 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ElevatorCompany.Models\ElevatorCompany.Models.csproj" />
+    <ProjectReference Include="..\ElevatorCompany.Services\ElevatorCompany.Services.csproj" />
+  </ItemGroup>
+
 </Project>
