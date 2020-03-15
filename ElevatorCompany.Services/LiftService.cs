@@ -133,11 +133,34 @@ namespace ElevatorCompany.Services
             {
                 case Instruction.Stop:
                     lift.State = LiftState.Stopped;
+                    if (!summons.Any() && !lift.Passengers.Any())
+                    {
+                        lift.Direction = null;
+                        break;
+                    }
+
+                    // there is a summons to go Down
+                    // no reason to keep going Up
+                    if (summons.Any(x => x.Level == lift.Level) && lift.Direction == Direction.Up && !summons.Any(x => x.Level > lift.Level))
+                    {
+                        lift.Direction = Direction.Down;
+                        break;
+                    }
+
+                    // there is a summons to go Up
+                    // no reason to keep going Down
+                    if (summons.Any(x => x.Level == lift.Level) && lift.Direction == Direction.Down && !summons.Any(x => x.Level < lift.Level))
+                    {
+                        lift.Direction = Direction.Down;
+                        break;
+                    }
                     break;
                 case Instruction.OpenDoors:
                     lift.State = LiftState.DoorsOpen;
                     // passengers get off
                     lift.Passengers.RemoveAll(x => x.DesiredLevel == lift.Level);
+                    // set the direction if not already heading in one
+                    lift.Direction = lift.Direction ?? summons.First(x => x.Level == lift.Level).Direction;
                     // passengers get on
                     lift.Passengers.AddRange(summons.Where(x => x.Level == lift.Level && x.Direction == lift.Direction)
                         .SelectMany(x => x.Passengers));

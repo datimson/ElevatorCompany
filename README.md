@@ -19,3 +19,14 @@ passenger before changing direction, and collect any passengers along the way wh
 
 #### 0 is considered Bottom/Ground Floor
 
+#### ElevatorState.Stop means stopped with closed doors
+
+For example, a set of instructions might look like this:
+
+1. TravelUp
+2. TravelUp
+3. Stop
+4. OpenDoors
+5. Stop
+
+Here the final instruction to Stop is saying to go back to the stopped state or 'Close Doors'.

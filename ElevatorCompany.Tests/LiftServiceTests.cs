@@ -375,6 +375,33 @@ namespace ElevatorCompany.Tests
             }
 
             [Fact]
+            public void WhenOpenDoorsAndNoDirection_ThenLiftDoorsOpenAndSetDireciton()
+            {
+                var lift = new Lift()
+                {
+                    Level = 5,
+                    State = LiftState.Stopped,
+                    Direction = null
+                };
+
+                var passengerGettingOn = new Passenger(0);
+                var summons = new List<Summon>()
+                {
+                    new Summon(5, Direction.Down, new List<Passenger>(){ passengerGettingOn })
+                };
+
+                LiftService.ExecuteInstruction(Instruction.OpenDoors, lift, summons);
+
+                Assert.True(lift.State == LiftState.DoorsOpen);
+                // passengers get on
+                Assert.Contains(passengerGettingOn, lift.Passengers);
+                // answered summons are removed
+                Assert.Empty(summons);
+                // direction set
+                Assert.True(lift.Direction == Direction.Down);
+            }
+
+            [Fact]
             public void WhenTravelUp_ThenMoveLiftUp()
             {
                 var lift = new Lift()
