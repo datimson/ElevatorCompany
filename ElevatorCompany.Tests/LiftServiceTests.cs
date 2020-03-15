@@ -28,6 +28,217 @@ namespace ElevatorCompany.Tests
                 Assert.True(nextInstruction == Instruction.OpenDoors);
             }
 
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndSummonsAtSameLevelWithOppositeDirectionAndSummonsInSameDirection_ThenDontOpen()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Up
+                };
+                var summons = new List<Summon>() { new Summon(1, Direction.Down, new List<Passenger>()), new Summon(2, Direction.Down, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.False(nextInstruction == Instruction.OpenDoors);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndSummonsAtSameLevelWithSameDirection_ThenOpenDoors()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Up
+                };
+                var summons = new List<Summon>() { new Summon(1, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.OpenDoors);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndDirectionUpAndSummonsAboveWithSameDirection_ThenTravelUp()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Up
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelUp);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndDirectionDownAndSummonsBelowWithSameDirection_ThenTravelDown()
+            {
+                var lift = new Lift
+                {
+                    Level = 3,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Down
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Down, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelDown);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndNoDirectionAndSummonsBelow_ThenTravelDown()
+            {
+                var lift = new Lift
+                {
+                    Level = 3,
+                    State = LiftState.Stopped,
+                    Direction = null
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Down, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelDown);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndNoDirectionAndSummonsBelowWithDirectionUp_ThenTravelDown()
+            {
+                var lift = new Lift
+                {
+                    Level = 3,
+                    State = LiftState.Stopped,
+                    Direction = null
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelDown);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndNoDirectionAndSummonsAbove_ThenTravelUp()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = null
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelUp);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndNoDirectionAndSummonsAboveWithDirectionDown_ThenTravelUp()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = null
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Down, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelUp);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndDirectionDownAndNoPassengersAndNoSummonsBelowAndSummonOnLevel_ThenOpenDoors()
+            {
+                var lift = new Lift
+                {
+                    Level = 5,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Down
+                };
+                var summons = new List<Summon>() { new Summon(5, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.OpenDoors);
+            }
+
+            // continue in same direction until no more summons or passengers
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedDirectionUpAndSummonsAbove_ThenTravelUp()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Up
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Down, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelUp);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedDirectionUpAndPassengersDesiredLevelAbove_ThenTravelUp()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Up,
+                    Passengers = new List<Passenger>() { new Passenger(4) }
+                };
+                var summons = new List<Summon>();
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelUp);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedDirectionDownAndSummonsBelow_ThenTravelDown()
+            {
+                var lift = new Lift
+                {
+                    Level = 5,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Down
+                };
+                var summons = new List<Summon>() { new Summon(2, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelDown);
+            }
+
+            [Fact]
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndDirectionDownAndPassengersDesiredLevelBelow_ThenTravelDown()
+            {
+                var lift = new Lift
+                {
+                    Level = 5,
+                    State = LiftState.Stopped,
+                    Direction = Direction.Down,
+                    Passengers = new List<Passenger>() { new Passenger(2) }
+                };
+                var summons = new List<Summon>();
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.TravelDown);
+            }
+
 
             [Fact]
             [Trait("State", "DoorsOpen")]

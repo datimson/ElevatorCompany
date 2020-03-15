@@ -44,6 +44,48 @@ namespace ElevatorCompany.Services
                         instruction = Instruction.OpenDoors;
                         break;
                     }
+
+                    // collect more passengers that are going the same direction
+                    if (summons.Any(x => x.Level == lift.Level && (!lift.Direction.HasValue || x.Direction == lift.Direction)))
+                    {
+                        instruction = Instruction.OpenDoors;
+                        break;
+                    }
+
+                    // there is a summons to go other direction
+                    // no reason to keep going this direction
+                    if (summons.Any(x => x.Level == lift.Level)
+                        && ((lift.Direction == Direction.Down && !summons.Any(x => x.Level < lift.Level)) || (lift.Direction == Direction.Up && !summons.Any(x => x.Level > lift.Level))))
+                    {
+                        instruction = Instruction.OpenDoors;
+                        break;
+                    }
+
+                    // continue down
+                    if (lift.Direction == Direction.Down && (lift.Passengers.Any(x => x.DesiredLevel < lift.Level) || summons.Any(x => x.Level < lift.Level)))
+                    {
+                        instruction = Instruction.TravelDown;
+                        break;
+                    }
+
+                    // continue up
+                    if (lift.Direction == Direction.Up && (lift.Passengers.Any(x => x.DesiredLevel > lift.Level) || summons.Any(x => x.Level > lift.Level)))
+                    {
+                        instruction = Instruction.TravelUp;
+                        break;
+                    }
+
+                    // should change direction?
+                    if ((!lift.Direction.HasValue || lift.Direction == Direction.Up) && !(lift.Passengers.Any(x => x.DesiredLevel > lift.Level) || summons.Any(x => x.Level > lift.Level)))
+                    {
+                        instruction = Instruction.TravelDown;
+                        break;
+                    }
+                    if ((!lift.Direction.HasValue || lift.Direction == Direction.Down) && !(lift.Passengers.Any(x => x.DesiredLevel < lift.Level) || summons.Any(x => x.Level < lift.Level)))
+                    {
+                        instruction = Instruction.TravelUp;
+                        break;
+                    }
                     break;
                 case LiftState.DoorsOpen:
                     // should stay open?
