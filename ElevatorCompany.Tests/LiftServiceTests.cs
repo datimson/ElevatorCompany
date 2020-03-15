@@ -28,8 +28,9 @@ namespace ElevatorCompany.Tests
                 {
                     State = LiftState.Moving
                 };
+                var summons = new List<Summon>();
 
-                LiftService.ExecuteInstruction(Instruction.Stop, lift);
+                LiftService.ExecuteInstruction(Instruction.Stop, lift, summons);
 
                 Assert.True(lift.State == LiftState.Stopped);
             }
@@ -47,8 +48,9 @@ namespace ElevatorCompany.Tests
                         new Passenger(0)
                     }
                 };
+                var summons = new List<Summon>();
 
-                LiftService.ExecuteInstruction(Instruction.OpenDoors, lift);
+                LiftService.ExecuteInstruction(Instruction.OpenDoors, lift, summons);
 
                 Assert.True(lift.State == LiftState.DoorsOpen);
                 Assert.DoesNotContain(lift.Passengers, x => x.DesiredLevel == lift.Level);
@@ -62,8 +64,9 @@ namespace ElevatorCompany.Tests
                     Level = 5,
                     State = LiftState.Stopped
                 };
+                var summons = new List<Summon>();
 
-                LiftService.ExecuteInstruction(Instruction.TravelUp, lift);
+                LiftService.ExecuteInstruction(Instruction.TravelUp, lift, summons);
 
                 Assert.True(lift.State == LiftState.Moving);
                 Assert.True(lift.Direction == Direction.Up);
@@ -78,8 +81,9 @@ namespace ElevatorCompany.Tests
                     Level = 5,
                     State = LiftState.Stopped
                 };
+                var summons = new List<Summon>();
 
-                LiftService.ExecuteInstruction(Instruction.TravelDown, lift);
+                LiftService.ExecuteInstruction(Instruction.TravelDown, lift, summons);
 
                 Assert.True(lift.State == LiftState.Moving);
                 Assert.True(lift.Direction == Direction.Down);
