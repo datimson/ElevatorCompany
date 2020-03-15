@@ -62,6 +62,11 @@ namespace ElevatorCompany.Services
                     lift.State = LiftState.DoorsOpen;
                     // passengers get off
                     lift.Passengers.RemoveAll(x => x.DesiredLevel == lift.Level);
+                    // passengers get on
+                    lift.Passengers.AddRange(summons.Where(x => x.Level == lift.Level && x.Direction == lift.Direction)
+                        .SelectMany(x => x.Passengers));
+                    // remove answered summons
+                    summons.RemoveAll(x => x.Level == lift.Level && x.Direction == lift.Direction);
                     break;
                 case Instruction.TravelUp:
                     lift.State = LiftState.Moving;

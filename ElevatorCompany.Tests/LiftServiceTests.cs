@@ -38,22 +38,34 @@ namespace ElevatorCompany.Tests
             [Fact]
             public void WhenOpenDoors_ThenLiftDoorsOpen()
             {
+                var passengerGettingOff = new Passenger(5);
                 var lift = new Lift()
                 {
                     Level = 5,
                     State = LiftState.Stopped,
+                    Direction = Direction.Down,
                     Passengers = new List<Passenger>()
                     {
-                        new Passenger(5),
+                        passengerGettingOff,
                         new Passenger(0)
                     }
                 };
-                var summons = new List<Summon>();
+
+                var passengerGettingOn = new Passenger(0);
+                var summons = new List<Summon>()
+                {
+                    new Summon(5, Direction.Down, new List<Passenger>(){ passengerGettingOn })
+                };
 
                 LiftService.ExecuteInstruction(Instruction.OpenDoors, lift, summons);
 
                 Assert.True(lift.State == LiftState.DoorsOpen);
-                Assert.DoesNotContain(lift.Passengers, x => x.DesiredLevel == lift.Level);
+                // passengers get off
+                Assert.DoesNotContain(passengerGettingOff, lift.Passengers);
+                // passengers get on
+                Assert.Contains(passengerGettingOn, lift.Passengers);
+                // answered summons are removed
+                Assert.Empty(summons);
             }
 
             [Fact]
