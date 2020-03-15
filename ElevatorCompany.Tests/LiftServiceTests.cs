@@ -13,9 +13,104 @@ namespace ElevatorCompany.Tests
         public class CalculateNextInstruction
         {
             [Fact]
-            public void When_Then()
+            [Trait("State", "Stopped")]
+            public void WhenStoppedAndPassengerAtDesiredLevel_ThenOpenDoors()
             {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Stopped,
+                    Passengers = new List<Passenger>() { new Passenger(1) }
+                };
+                var summons = new List<Summon>();
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
 
+                Assert.True(nextInstruction == Instruction.OpenDoors);
+            }
+
+
+            [Fact]
+            [Trait("State", "DoorsOpen")]
+            public void WhenDoorsOpenAndPassengerAtDesiredLevel_ThenStayOpen()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.DoorsOpen,
+                    Passengers = new List<Passenger>() { new Passenger(1) }
+                };
+                var summons = new List<Summon>();
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.OpenDoors);
+            }
+
+            [Fact]
+            [Trait("State", "DoorsOpen")]
+            public void WhenDoorsOpenAndSummonsAtSameLevelAndDirection_ThenStayOpen()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.DoorsOpen,
+                    Direction = Direction.Up
+                };
+                var summons = new List<Summon>() { new Summon(1, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.OpenDoors);
+            }
+
+
+            [Fact]
+            [Trait("State", "Moving")]
+            public void WhenMovingAndPassengerAtDesiredLevel_ThenStop()
+            {
+                var lift = new Lift
+                {
+                    Level = 1,
+                    State = LiftState.Moving,
+                    Direction = Direction.Up,
+                    Passengers = new List<Passenger>() { new Passenger(1) }
+                };
+                var summons = new List<Summon>();
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.Stop);
+            }
+
+            [Fact]
+            [Trait("State", "Moving")]
+            public void WhenMovingAndSummonAtLevelWithSameDirection_ThenStop()
+            {
+                var lift = new Lift
+                {
+                    Level = 5,
+                    State = LiftState.Moving,
+                    Direction = Direction.Down,
+                    Passengers = new List<Passenger>() { new Passenger(1) }
+                };
+                var summons = new List<Summon>() { new Summon(5, Direction.Down, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.Stop);
+            }
+
+            [Fact]
+            [Trait("State", "Moving")]
+            public void WhenMovingAndSummonAtLevelWithOppositeDirectionAndNoOtherSummonsOrPassengers_ThenStop()
+            {
+                var lift = new Lift
+                {
+                    Level = 5,
+                    State = LiftState.Moving,
+                    Direction = Direction.Down,
+                    Passengers = new List<Passenger>()
+                };
+                var summons = new List<Summon>() { new Summon(5, Direction.Up, new List<Passenger>()) };
+                var nextInstruction = LiftService.CalculateNextInstruction(lift, summons);
+
+                Assert.True(nextInstruction == Instruction.Stop);
             }
         }
 

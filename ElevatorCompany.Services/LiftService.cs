@@ -38,13 +38,47 @@ namespace ElevatorCompany.Services
             switch (lift.State)
             {
                 case LiftState.Stopped:
-                    instruction = Instruction.TravelUp;
+                    // let passengers off?
+                    if (lift.Passengers.Any(x => x.DesiredLevel == lift.Level))
+                    {
+                        instruction = Instruction.OpenDoors;
+                        break;
+                    }
                     break;
                 case LiftState.DoorsOpen:
+                    // should stay open?
+                    if (summons.Any(x => x.Level == lift.Level && (!lift.Direction.HasValue || x.Direction == lift.Direction))
+                        || lift.Passengers.Any(x => x.DesiredLevel == lift.Level))
+                    {
+                        instruction = Instruction.OpenDoors;
+                        break;
+                    }
+
                     instruction = Instruction.Stop; // close doors
                     break;
                 case LiftState.Moving:
-                    instruction = Instruction.Stop;
+                    // stop to drop passengers off?
+                    if (lift.Passengers.Any(x => x.DesiredLevel == lift.Level))
+                    {
+                        instruction = Instruction.Stop;
+                        break;
+                    }
+                    // stop to pickup more passengers going the same direction
+                    if (summons.Any(x => x.Level == lift.Level && x.Direction == lift.Direction))
+                    {
+                        instruction = Instruction.Stop;
+                        break;
+                    }
+                    // stop to change direction
+                    if ((lift.Direction == Direction.Up && !(lift.Passengers.Any(x => x.DesiredLevel > lift.Level) || summons.Any(x => x.Level > lift.Level)))
+                        || (lift.Direction == Direction.Down && !(lift.Passengers.Any(x => x.DesiredLevel < lift.Level) || summons.Any(x => x.Level < lift.Level))))
+                    {
+                        instruction = Instruction.Stop;
+                        break;
+                    }
+
+                    // keep going
+                    instruction = lift.Direction == Direction.Up ? Instruction.TravelUp : Instruction.TravelDown;
                     break;
             }
 
